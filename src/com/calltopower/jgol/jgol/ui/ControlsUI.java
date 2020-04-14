@@ -39,15 +39,14 @@ public class ControlsUI extends JFrame {
     private JButton resetButton;
     private JButton pauseButton;
     private JButton nextGenerationButton;
-    private JButton showRoundsButton;
     private JButton quitButton;
     private JButton aboutButton;
     private JButton clearButton;
     private JButton importButton;
     private JButton exportButton;
-    private JSlider roundLengthSlider;
-    private JLabel labelRoundTimeout;
-    private JLabel labelRoundTimeoutVal;
+    private JSlider generationLengthSlider;
+    private JLabel labelGenerationTimeout;
+    private JLabel labelGenerationTimeoutVal;
     private JSlider nrOfFieldsSlider;
     private JLabel labelNrOfFields;
     private JLabel labelNrOfFieldsVal;
@@ -79,7 +78,7 @@ public class ControlsUI extends JFrame {
 
         registerButtons();
 
-        Dimension minimumDimension = new Dimension(350, 420);
+        Dimension minimumDimension = new Dimension(350, 390);
         setMinimumSize(minimumDimension);
         setPreferredSize(minimumDimension);
         pack();
@@ -96,7 +95,7 @@ public class ControlsUI extends JFrame {
         fieldUI = new FieldUI();
         fieldUI.setVisible(true);
 
-        fieldUI.updateRoundTimeout(roundLengthSlider.getValue());
+        fieldUI.updateGenerationTimeout(generationLengthSlider.getValue());
     }
 
     private void showAboutDialog(String title, String msg) {
@@ -111,16 +110,15 @@ public class ControlsUI extends JFrame {
         resetButton = new JButton("Reset");
         pauseButton = new JButton("Pause");
         nextGenerationButton = new JButton("Next generation");
-        showRoundsButton = new JButton("Show Rounds");
         quitButton = new JButton("Quit");
         aboutButton = new JButton("About");
         clearButton = new JButton("Clear");
         importButton = new JButton("Import");
         exportButton = new JButton("Export");
-        roundLengthSlider = new JSlider(1, Constants.GAME_MAX_ROUND_LENGTH);
-        roundLengthSlider.setValue((int) Constants.DEFAULT_ROUND_TIMEOUT);
-        labelRoundTimeout = new JLabel("Round Length:");
-        labelRoundTimeoutVal = new JLabel(String.valueOf(roundLengthSlider.getValue()));
+        generationLengthSlider = new JSlider(1, Constants.GAME_MAX_GENERATION_LENGTH);
+        generationLengthSlider.setValue((int) Constants.DEFAULT_GENERATION_TIMEOUT);
+        labelGenerationTimeout = new JLabel("Generation Length:");
+        labelGenerationTimeoutVal = new JLabel(String.valueOf(generationLengthSlider.getValue()));
         nrOfFieldsSlider = new JSlider(Constants.GAME_MIN_NR_OF_FIELDS, Constants.GAME_MAX_NR_OF_FIELDS);
         nrOfFieldsSlider.setValue(Constants.DEFAULT_NR_OF_FIELDS);
         labelNrOfFields = new JLabel("Nr Of Fields:");
@@ -154,31 +152,25 @@ public class ControlsUI extends JFrame {
         c.gridwidth = 3;
         c.gridx = 0;
         c.gridy = currY++;
-        panelMain.add(showRoundsButton, c);
-
-        c.weightx = 1.0;
-        c.gridwidth = 3;
-        c.gridx = 0;
-        c.gridy = currY++;
         panelMain.add(nextGenerationButton, c);
 
         c.weightx = 0.1;
         c.gridwidth = 1;
         c.gridx = 0;
         c.gridy = currY;
-        panelMain.add(labelRoundTimeout, c);
+        panelMain.add(labelGenerationTimeout, c);
 
         c.weightx = 0.7;
         c.gridwidth = 1;
         c.gridx = 1;
         c.gridy = currY;
-        panelMain.add(roundLengthSlider, c);
+        panelMain.add(generationLengthSlider, c);
 
         c.weightx = 0.2;
         c.gridwidth = 1;
         c.gridx = 2;
         c.gridy = currY++;
-        panelMain.add(labelRoundTimeoutVal, c);
+        panelMain.add(labelGenerationTimeoutVal, c);
 
         c.weightx = 0.1;
         c.gridwidth = 1;
@@ -274,9 +266,9 @@ public class ControlsUI extends JFrame {
             fieldUI.clearGame();
         }));
 
-        roundLengthSlider.addChangeListener(e -> SwingUtilities.invokeLater(() -> {
-            fieldUI.updateRoundTimeout(roundLengthSlider.getValue());
-            labelRoundTimeoutVal.setText(String.valueOf(roundLengthSlider.getValue()));
+        generationLengthSlider.addChangeListener(e -> SwingUtilities.invokeLater(() -> {
+            fieldUI.updateGenerationTimeout(generationLengthSlider.getValue());
+            labelGenerationTimeoutVal.setText(String.valueOf(generationLengthSlider.getValue()));
         }));
 
         fieldSizeSlider.addChangeListener(e -> SwingUtilities.invokeLater(() -> {
@@ -299,10 +291,6 @@ public class ControlsUI extends JFrame {
             } else {
                 updateGUIOnFieldDimensionSliderChange = true;
             }
-        }));
-
-        showRoundsButton.addActionListener((e) -> SwingUtilities.invokeLater(() -> {
-            fieldUI.toggleShowRounds();
         }));
 
         importButton.addActionListener((e) -> SwingUtilities.invokeLater(() -> {

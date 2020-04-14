@@ -142,6 +142,20 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
+    public int getNrOfAliveCells() {
+        int count = 0;
+        for (int i = 0; i < field.length; ++i) {
+            for (int j = 0; j < field[0].length; ++j) {
+                if (field[i][j].getValue().equals(FieldValue.ACTIVE)) {
+                    ++count;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    @Override
     public void draw(Graphics graphics) {
         drawFields(graphics);
         drawLines(graphics);

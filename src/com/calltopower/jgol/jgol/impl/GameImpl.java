@@ -30,14 +30,14 @@ public class GameImpl implements Initializable, Game {
     private GameField field;
     private Graphics panelGraphics;
     private Graphics backBufferGraphics;
-    private long rounds;
+    private long generations;
     private boolean gameLoopRunning;
     private boolean run;
-    private boolean showRounds;
-    private long roundTimeout;
+    private long generationTimeout;
     private FieldDimension fieldDimension;
     private int nrOfFields;
     private int fieldSize;
+    private int nrAllCells;
 
     /**
      * Constructor
@@ -52,13 +52,15 @@ public class GameImpl implements Initializable, Game {
         this.fieldSize = fieldSize;
 
         gameLoopRunning = false;
-        rounds = 0;
+        generations = 0;
         run = false;
 
         int val = this.nrOfFields * this.fieldSize;
         fieldDimension = new FieldDimensionImpl(val, val);
 
-        resetRoundTimeout();
+        this.nrAllCells = this.nrOfFields * this.nrOfFields;
+
+        resetGenerationTimeout();
         init();
     }
 
@@ -85,18 +87,13 @@ public class GameImpl implements Initializable, Game {
     }
 
     @Override
-    public long getRoundTimeout() {
-        return roundTimeout;
+    public long getGenerationTimeout() {
+        return generationTimeout;
     }
 
     @Override
     public FieldValue getFieldValue(int x, int y) {
         return field.get(x, y).getValue();
-    }
-
-    @Override
-    public boolean isShowingRounds() {
-        return showRounds;
     }
 
     @Override
@@ -114,19 +111,8 @@ public class GameImpl implements Initializable, Game {
     }
 
     @Override
-    public void setRoundTimeout(long timeout) {
-        roundTimeout = timeout;
-    }
-
-    @Override
-    public void toggleShowRounds() {
-        setShowRounds(!showRounds);
-    }
-
-    @Override
-    public void setShowRounds(boolean showRounds) {
-        this.showRounds = showRounds;
-        redraw(null);
+    public void setGenerationTimeout(long timeout) {
+        generationTimeout = timeout;
     }
 
     @Override
@@ -138,19 +124,19 @@ public class GameImpl implements Initializable, Game {
     @Override
     public void reset() {
         backBuffer = new BufferedImage(fieldDimension.getWidth(),
-                                        fieldDimension.getHeight(),
+                                        fieldDimension.getHeight() + Constants.INFO_FIELD_SIZE,
                                         BufferedImage.TYPE_INT_RGB);
         field = new GameFieldImpl(nrOfFields, fieldSize);
         gameLoopRunning = false;
-        rounds = 0;
+        generations = 0;
         run = false;
         field.seed();
         redraw(null);
     }
 
     @Override
-    public void resetRoundTimeout() {
-        roundTimeout = Constants.DEFAULT_ROUND_TIMEOUT;
+    public void resetGenerationTimeout() {
+        generationTimeout = Constants.DEFAULT_GENERATION_TIMEOUT;
     }
 
     @Override
@@ -160,8 +146,8 @@ public class GameImpl implements Initializable, Game {
             run = true;
 
             while (run) {
-                generateNextRound();
-                sleep(roundTimeout);
+                generateNextGenerationInternal();
+                sleep(generationTimeout);
             }
             gameLoopRunning = false;
         }
@@ -175,11 +161,11 @@ public class GameImpl implements Initializable, Game {
     @Override
     public void clear() {
         backBuffer = new BufferedImage(fieldDimension.getWidth(),
-                                        fieldDimension.getHeight(),
+                                        fieldDimension.getHeight() + Constants.INFO_FIELD_SIZE,
                                         BufferedImage.TYPE_INT_RGB);
         field = new GameFieldImpl(nrOfFields, fieldSize);
         gameLoopRunning = false;
-        rounds = 0;
+        generations = 0;
         run = false;
         redraw(null);
     }
@@ -187,7 +173,7 @@ public class GameImpl implements Initializable, Game {
     @Override
     public void generateNextGeneration() {
         if (!gameLoopRunning) {
-            generateNextRound();
+            generateNextGenerationInternal();
         }
     }
 
@@ -202,13 +188,24 @@ public class GameImpl implements Initializable, Game {
         backBufferGraphics.setColor(Color.black);
         backBufferGraphics.fillRect(0, 0, backBuffer.getWidth(), backBuffer.getHeight());
         field.draw(backBufferGraphics);
-        if (showRounds) {
-            backBufferGraphics.setColor(Color.black);
-            backBufferGraphics.fillRect(0, 0, 100, 30);
-            backBufferGraphics.setColor(Color.white);
-            backBufferGraphics.setFont(new Font("TimesRoman", Font.PLAIN, 16));
-            backBufferGraphics.drawString("#" + String.valueOf(rounds), 5, 20);
-        }
+
+        backBufferGraphics.setColor(Color.black);
+        backBufferGraphics.fillRect(0,
+                                    backBuffer.getHeight() - Constants.INFO_FIELD_SIZE,
+                                    backBuffer.getWidth(),
+                                    Constants.INFO_FIELD_SIZE);
+        backBufferGraphics.setColor(Color.white);
+        backBufferGraphics.setFont(new Font("TimesRoman", Font.PLAIN, 16));
+        int nrAliveCells = field.getNrOfAliveCells();
+        int nrDeadCells = nrAllCells - nrAliveCells;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Number of generations: ");
+        sb.append(generations);
+        sb.append("    ");
+        sb.append(nrAllCells);
+        sb.append(" Cells (alive: ").append(nrAliveCells).append(", dead: ").append(nrDeadCells).append(")");
+        backBufferGraphics.drawString(sb.toString(), 5, backBuffer.getHeight() - Constants.INFO_FIELD_SIZE + 25);
+
         panelGraphics.drawImage(backBuffer, 0, 0, null);
     }
 
@@ -221,8 +218,8 @@ public class GameImpl implements Initializable, Game {
         panelGraphics.dispose();
     }
 
-    private void generateNextRound() {
-        ++rounds;
+    private void generateNextGenerationInternal() {
+        ++generations;
         field.generateNewGeneration();
         panelGraphics = this.panel.getGraphics();
         backBufferGraphics = backBuffer.getGraphics();

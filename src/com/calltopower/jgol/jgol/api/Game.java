@@ -35,11 +35,11 @@ public interface Game extends Drawable {
     int getFieldSize();
 
     /**
-     * Returns the round timeout
+     * Returns the generation timeout
      * 
-     * @return the round timeout
+     * @return the generation timeout
      */
-    long getRoundTimeout();
+    long getGenerationTimeout();
 
     /**
      * Returns the field value at row/column
@@ -49,13 +49,6 @@ public interface Game extends Drawable {
      * @return The field value
      */
     FieldValue getFieldValue(int x, int y);
-
-    /**
-     * Whether is showing rounds
-     * 
-     * @return whether is showing rounds
-     */
-    boolean isShowingRounds();
 
     /**
      * Returns whether the game is running
@@ -73,22 +66,11 @@ public interface Game extends Drawable {
     boolean setValues(FieldValue[][] values);
 
     /**
-     * Sets a new round timeout
+     * Sets a new generation timeout
      * 
-     * @param timeout new round timeout
+     * @param timeout new generation timeout
      */
-    void setRoundTimeout(long timeout);
-
-    /**
-     * Toggles the rounds show
-     */
-    void toggleShowRounds();
-
-    /**
-     * Shows/hides the rounds
-     * @param showRounds Boolean flag whether to show or hide the rounds
-     */
-    void setShowRounds(boolean showRounds);
+    void setGenerationTimeout(long timeout);
 
     /**
      * Toggles the field on row/column
@@ -104,9 +86,9 @@ public interface Game extends Drawable {
     void reset();
 
     /**
-     * Resets the round timeout
+     * Resets the generation timeout
      */
-    void resetRoundTimeout();
+    void resetGenerationTimeout();
 
     /**
      * Loops the game one time

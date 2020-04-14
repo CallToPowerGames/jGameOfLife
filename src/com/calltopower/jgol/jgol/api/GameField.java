@@ -79,4 +79,11 @@ public interface GameField extends Printable, Drawable {
      */
     void generateNewGeneration();
 
+    /**
+     * Returns the number of alive cells
+     * 
+     * @return The number of alive cells
+     */
+    int getNrOfAliveCells();
+
 }

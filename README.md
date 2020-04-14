@@ -9,8 +9,8 @@ Conway's Game of Life implementation.
 ## Features
 
 * "Live" update cells via mouse click while game is running
-* Different round speeds
-* Manual next round
+* Different generation speeds
+* Manual next generation
 * Configurable field size
 * Import & Export patterns
 * Example patterns (under "patterns")

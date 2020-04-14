@@ -55,7 +55,7 @@ public class FieldUI extends JFrame {
         setContentPane(panelMain);
 
         int size = Constants.DEFAULT_NR_OF_FIELDS * Constants.DEFAULT_FIELD_SIZE;
-        Dimension dimension = new Dimension(size, size);
+        Dimension dimension = new Dimension(size, size + Constants.INFO_FIELD_SIZE);
         setMinimumSize(dimension);
         setPreferredSize(dimension);
         pack();
@@ -90,50 +90,46 @@ public class FieldUI extends JFrame {
         game.clear();
     }
 
-    protected void updateRoundTimeout(long timeout) {
+    protected void updateGenerationTimeout(long timeout) {
         game.pause();
         if (timeout > 0) {
-            game.setRoundTimeout(timeout);
+            game.setGenerationTimeout(timeout);
         } else {
-            game.resetRoundTimeout();
+            game.resetGenerationTimeout();
         }
     }
 
     protected void updateFieldSize(int fieldSize) {
         clearGame();
-        long roundTimeout = game.getRoundTimeout();
+        long generationTimeout = game.getGenerationTimeout();
         int nrOfFields = game.getNrOfFields();
 
         int size = nrOfFields * fieldSize;
-        Dimension dimension = new Dimension(size, size);
+        Dimension dimension = new Dimension(size, size + Constants.INFO_FIELD_SIZE);
         setMinimumSize(dimension);
         setPreferredSize(dimension);
         pack();
         setLocationRelativeTo(null);
 
         game = new GameImpl(panelMain, nrOfFields, fieldSize);
-        game.setRoundTimeout(roundTimeout);
+        game.setGenerationTimeout(generationTimeout);
     }
 
     protected void updateNrOfFields(int nrOfFields) {
         clearGame();
 
-        long roundTimeout = game.getRoundTimeout();
+        long generationTimeout = game.getGenerationTimeout();
         int fieldSize = game.getFieldSize();
 
         int size = nrOfFields * fieldSize;
-        Dimension dimension = new Dimension(size, size);
+        Dimension dimension = new Dimension(size, size + Constants.INFO_FIELD_SIZE);
         setMinimumSize(dimension);
         setPreferredSize(dimension);
         pack();
         setLocationRelativeTo(null);
 
         game = new GameImpl(panelMain, nrOfFields, fieldSize);
-        game.setRoundTimeout(roundTimeout);
-    }
-
-    protected void toggleShowRounds() {
-        game.toggleShowRounds();
+        game.setGenerationTimeout(generationTimeout);
     }
 
     protected FileData importFile() {
@@ -156,7 +152,7 @@ public class FieldUI extends JFrame {
 
     protected void setFile(FileData fileData) {
         int size = fileData.getNrOfFields() * fileData.getFieldSize();
-        Dimension dimension = new Dimension(size, size);
+        Dimension dimension = new Dimension(size, size + Constants.INFO_FIELD_SIZE);
         setMinimumSize(dimension);
         setPreferredSize(dimension);
         pack();
