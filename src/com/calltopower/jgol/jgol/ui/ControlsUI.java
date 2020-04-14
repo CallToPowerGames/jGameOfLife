@@ -301,6 +301,8 @@ public class ControlsUI extends JFrame {
                 updateGUIOnFieldDimensionSliderChange = false;
                 fieldSizeSlider.setValue(fileData.getFieldSize());
                 labelFieldSizeVal.setText(String.valueOf(fieldSizeSlider.getValue()));
+                nrOfFieldsSlider.setValue(fileData.getFieldSize());
+                labelNrOfFieldsVal.setText(String.valueOf(fieldSizeSlider.getValue()));
                 fieldUI.setFile(fileData);
                 fieldUI.setVisible(true);
             }

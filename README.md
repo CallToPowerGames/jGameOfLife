@@ -24,6 +24,8 @@ Conway's Game of Life implementation.
 
 ![Screenshot](img/screenshot.jpg?raw=true)
 
+![Screenshot - xkcd Conway](img/screenshot_xkcd_conway.jpg?raw=true)
+
 ## Build
 
 There are different ant tasks configured:
