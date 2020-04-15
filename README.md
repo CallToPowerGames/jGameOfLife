@@ -2,6 +2,18 @@
 
 Conway's Game of Life implementation.
 
+## Rules
+
+### Active cells
+
+* Each cell with one or no neighbors dies
+* Each cell with four or more neighbors dies
+* Each cell with two or three neighbors survives.
+
+### Inactice cells
+
+* Each cell with three neighbors becomes populated.
+
 ## Copyright
 
 (C) 2016-2020 Denis Meyer

@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
+import com.calltopower.jgol.jgol.api.AdjacentCells;
 import com.calltopower.jgol.jgol.api.Field;
 import com.calltopower.jgol.jgol.api.FieldDimension;
 import com.calltopower.jgol.jgol.api.GameField;
@@ -120,13 +121,17 @@ public class GameFieldImpl implements GameField {
             for (int j = 0; j < field[0].length; ++j) {
                 Field currF = field[i][j];
                 fieldBackbuffer[i][j] = new FieldImpl(currF.getX(), currF.getY(), currF.getSize(), currF.getValue());
-                AdjacentCellsImpl adjacentCells = new AdjacentCellsImpl(this, currF);
+                AdjacentCells adjacentCells = new AdjacentCellsImpl(this, currF);
                 int nrOfNeighbors = adjacentCells.getNumberOfActiveNeighbors();
                 if (fieldBackbuffer[i][j].getValue() == FieldValue.ACTIVE) {
+                    // Each cell with one or no neighbors dies
+                    // Each cell with four or more neighbors dies
+                    // Each cell with two or three neighbors survives.
                     if (nrOfNeighbors < 2 || nrOfNeighbors > 3) {
                         fieldBackbuffer[i][j].setValue(FieldValue.INACTIVE);
                     }
                 } else {
+                    // Each cell with three neighbors becomes populated.
                     if (nrOfNeighbors == 3) {
                         fieldBackbuffer[i][j].setValue(FieldValue.ACTIVE);
                     }
