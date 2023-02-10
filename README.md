@@ -16,7 +16,7 @@ Conway's Game of Life implementation.
 
 ## Copyright
 
-(C) 2016-2020 Denis Meyer
+(C) 2016-2023 Denis Meyer
 
 ## Features
 
@@ -27,22 +27,13 @@ Conway's Game of Life implementation.
 * Import & Export patterns
 * Example patterns (under "patterns")
 
-## Prerequisites
-
-* Java 8
-* Ant
-
 ## Screenshot
 
 ![Screenshot](img/screenshot.jpg?raw=true)
 
 ![Screenshot - xkcd Conway](img/screenshot_xkcd_conway.jpg?raw=true)
 
-## Build
+## Prerequisites for development
 
-There are different ant tasks configured:
-
-* clean
-* compile
-* jar
-* run-jar
+* Java 17
+* Gradle 7.3.3
