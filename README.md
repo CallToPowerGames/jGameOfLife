@@ -29,9 +29,9 @@ Conway's Game of Life implementation.
 
 ## Screenshot
 
-![Screenshot](img/screenshot.jpg?raw=true)
+![Screenshot](img/screenshot.png?raw=true)
 
-![Screenshot - xkcd Conway](img/screenshot_xkcd_conway.jpg?raw=true)
+![Screenshot - xkcd Conway](img/screenshot_xkcd_conway.png?raw=true)
 
 ## Prerequisites for development
 

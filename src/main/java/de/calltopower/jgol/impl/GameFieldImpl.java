@@ -15,6 +15,7 @@ import de.calltopower.jgol.api.Field;
 import de.calltopower.jgol.api.FieldDimension;
 import de.calltopower.jgol.api.GameField;
 import de.calltopower.jgol.enums.FieldValue;
+import lombok.Getter;
 
 /**
  * GameField implementation
@@ -25,15 +26,17 @@ public class GameFieldImpl implements GameField {
     private int fieldSize;
     private FieldDimension dimension;
     private FieldDimension currentArraySize;
-    private Field[][] field;
     private Field[][] fieldBackbuffer;
     private Color colorLines = Color.red;
+
+    @Getter
+    private Field[][] field;
 
     /**
      * Constructor
      * 
      * @param nrOfFields The number of fields
-     * @param fieldSize The field size
+     * @param fieldSize  The field size
      */
     public GameFieldImpl(int nrOfFields, int fieldSize) {
         this.nrOfFields = nrOfFields;
@@ -49,22 +52,17 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public Field[][] getField() {
-        return field;
-    }
-
-    @Override
     public Field get(int x, int y) {
         if (!isValidCoordinate(x, y)) {
             throw new IndexOutOfBoundsException();
         }
-        return this.field[x][y];
+        return getField()[x][y];
     }
 
     @Override
     public void highlightField(int xCoord, int yCoord) {
-        for (Field[] aField : field) {
-            for (int j = 0; j < field[0].length; ++j) {
+        for (Field[] aField : getField()) {
+            for (int j = 0; j < getField()[0].length; ++j) {
                 aField[j].setHighlighted(aField[j].isInside(yCoord, xCoord));
             }
         }
@@ -72,8 +70,8 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public void toggleField(int xCoord, int yCoord) {
-        for (Field[] aField : field) {
-            for (int j = 0; j < field[0].length; ++j) {
+        for (Field[] aField : getField()) {
+            for (int j = 0; j < getField()[0].length; ++j) {
                 if (aField[j].isInside(yCoord, xCoord)) {
                     aField[j].toggleValue();
                     return;
@@ -87,7 +85,7 @@ public class GameFieldImpl implements GameField {
         if (!isValidCoordinate(x, y)) {
             throw new IndexOutOfBoundsException();
         }
-        this.field[x][y].setValue(value);
+        getField()[x][y].setValue(value);
         return true;
     }
 
@@ -177,7 +175,7 @@ public class GameFieldImpl implements GameField {
         currentArraySize = calculateArraySize();
         for (int i = 0; i < currentArraySize.getWidth(); ++i) {
             for (int j = 0; j < currentArraySize.getHeight(); ++j) {
-                sb.append(field[i][j].getValue().getValue()).append(j >= currentArraySize.getHeight() - 1 ? "\n" : " ");
+                sb.append(field[i][j].getValue().getVal()).append(j >= currentArraySize.getHeight() - 1 ? "\n" : " ");
             }
         }
         sb.append("}");

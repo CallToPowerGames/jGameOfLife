@@ -6,6 +6,8 @@
 
 package de.calltopower.jgol.enums;
 
+import lombok.Getter;
+
 /**
  * Enumeration for a field value
  */
@@ -20,6 +22,7 @@ public enum FieldValue {
      */
     INACTIVE("X");
 
+    @Getter
     private String val;
 
     /**
@@ -31,18 +34,9 @@ public enum FieldValue {
         this.val = val;
     }
 
-    /**
-     * Returns the value of the field
-     * 
-     * @return the value of the field
-     */
-    public String getValue() {
-        return this.val;
-    }
-
     @Override
     public String toString() {
-        return getValue();
+        return getVal();
     }
 
 }

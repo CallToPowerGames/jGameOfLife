@@ -13,7 +13,7 @@ public final class Constants {
 
     public static final String APP_NAME = "jGameOfLife";
     public static final String APP_COPYRIGHT = "Copyright (C) 2016-2023 Denis Meyer";
-    public static final String APP_VERSION = "v1.2.0";
+    public static final String APP_VERSION = "v1.2.1";
 
     public static final String JGOL_DATA_NAME = "jgol";
     public static final String JGOL_FILE_SUFFIX = "jgol";

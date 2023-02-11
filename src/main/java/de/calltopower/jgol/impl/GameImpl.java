@@ -19,6 +19,8 @@ import de.calltopower.jgol.api.GameField;
 import de.calltopower.jgol.api.Initializable;
 import de.calltopower.jgol.enums.FieldValue;
 import de.calltopower.jgol.utils.Constants;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Game implementation
@@ -27,24 +29,33 @@ public class GameImpl implements Initializable, Game {
 
     private JPanel panel;
     private BufferedImage backBuffer;
-    private GameField field;
     private Graphics panelGraphics;
     private Graphics backBufferGraphics;
     private long generations;
     private boolean gameLoopRunning;
     private boolean run;
-    private long generationTimeout;
-    private FieldDimension fieldDimension;
-    private int nrOfFields;
-    private int fieldSize;
     private int nrAllCells;
+    private FieldDimension fieldDimension;
+
+    @Getter
+    private GameField gameField;
+
+    @Getter
+    @Setter
+    private long generationTimeout;
+
+    @Getter
+    private int nrOfFields;
+
+    @Getter
+    private int fieldSize;
 
     /**
      * Constructor
      * 
-     * @param panel The swing panel
+     * @param panel      The swing panel
      * @param nrOfFields The number of fields
-     * @param fieldSize The field size
+     * @param fieldSize  The field size
      */
     public GameImpl(JPanel panel, int nrOfFields, int fieldSize) {
         this.panel = panel;
@@ -72,28 +83,8 @@ public class GameImpl implements Initializable, Game {
     }
 
     @Override
-    public GameField getGameField() {
-        return field;
-    }
-
-    @Override
-    public int getNrOfFields() {
-        return nrOfFields;
-    }
-
-    @Override
-    public int getFieldSize() {
-        return fieldSize;
-    }
-
-    @Override
-    public long getGenerationTimeout() {
-        return generationTimeout;
-    }
-
-    @Override
     public FieldValue getFieldValue(int x, int y) {
-        return field.get(x, y).getValue();
+        return getGameField().get(x, y).getValue();
     }
 
     @Override
@@ -104,33 +95,27 @@ public class GameImpl implements Initializable, Game {
     @Override
     public boolean setValues(FieldValue[][] values) {
         // clear();
-        boolean set = field.setValues(values);
+        boolean set = getGameField().setValues(values);
         redraw(null);
 
         return set;
     }
 
     @Override
-    public void setGenerationTimeout(long timeout) {
-        generationTimeout = timeout;
-    }
-
-    @Override
     public void toggleField(int x, int y) {
-        field.toggleField(x, y);
+        getGameField().toggleField(x, y);
         redraw(null);
     }
 
     @Override
     public void reset() {
         backBuffer = new BufferedImage(fieldDimension.getWidth(),
-                                        fieldDimension.getHeight() + Constants.INFO_FIELD_SIZE,
-                                        BufferedImage.TYPE_INT_RGB);
-        field = new GameFieldImpl(nrOfFields, fieldSize);
+                fieldDimension.getHeight() + Constants.INFO_FIELD_SIZE, BufferedImage.TYPE_INT_RGB);
+        gameField = new GameFieldImpl(nrOfFields, fieldSize);
         gameLoopRunning = false;
         generations = 0;
         run = false;
-        field.seed();
+        getGameField().seed();
         redraw(null);
     }
 
@@ -161,9 +146,8 @@ public class GameImpl implements Initializable, Game {
     @Override
     public void clear() {
         backBuffer = new BufferedImage(fieldDimension.getWidth(),
-                                        fieldDimension.getHeight() + Constants.INFO_FIELD_SIZE,
-                                        BufferedImage.TYPE_INT_RGB);
-        field = new GameFieldImpl(nrOfFields, fieldSize);
+                fieldDimension.getHeight() + Constants.INFO_FIELD_SIZE, BufferedImage.TYPE_INT_RGB);
+        gameField = new GameFieldImpl(nrOfFields, fieldSize);
         gameLoopRunning = false;
         generations = 0;
         run = false;
@@ -179,7 +163,7 @@ public class GameImpl implements Initializable, Game {
 
     @Override
     public void highlightField(int x, int y) {
-        field.highlightField(x, y);
+        getGameField().highlightField(x, y);
         redraw(null);
     }
 
@@ -187,16 +171,14 @@ public class GameImpl implements Initializable, Game {
     public void draw(Graphics graphics) {
         backBufferGraphics.setColor(Color.black);
         backBufferGraphics.fillRect(0, 0, backBuffer.getWidth(), backBuffer.getHeight());
-        field.draw(backBufferGraphics);
+        getGameField().draw(backBufferGraphics);
 
         backBufferGraphics.setColor(Color.black);
-        backBufferGraphics.fillRect(0,
-                                    backBuffer.getHeight() - Constants.INFO_FIELD_SIZE,
-                                    backBuffer.getWidth(),
-                                    Constants.INFO_FIELD_SIZE);
+        backBufferGraphics.fillRect(0, backBuffer.getHeight() - Constants.INFO_FIELD_SIZE, backBuffer.getWidth(),
+                Constants.INFO_FIELD_SIZE);
         backBufferGraphics.setColor(Color.white);
         backBufferGraphics.setFont(new Font("TimesRoman", Font.PLAIN, 16));
-        int nrAliveCells = field.getNrOfAliveCells();
+        int nrAliveCells = getGameField().getNrOfAliveCells();
         int nrDeadCells = nrAllCells - nrAliveCells;
         StringBuilder sb = new StringBuilder();
         sb.append("Number of generations: ");
@@ -220,7 +202,7 @@ public class GameImpl implements Initializable, Game {
 
     private void generateNextGenerationInternal() {
         ++generations;
-        field.generateNewGeneration();
+        getGameField().generateNewGeneration();
         panelGraphics = this.panel.getGraphics();
         backBufferGraphics = backBuffer.getGraphics();
         draw(null);

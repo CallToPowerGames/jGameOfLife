@@ -7,10 +7,12 @@
 package de.calltopower.jgol.utils;
 
 import de.calltopower.jgol.enums.FieldValue;
+import lombok.Getter;
 
 /**
  * File data construct
  */
+@Getter
 public class FileData {
 
     private String name;
@@ -23,22 +25,6 @@ public class FileData {
         this.nrOfFields = nrOfFields;
         this.fieldSize = fieldSize;
         this.values = values;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getNrOfFields() {
-        return nrOfFields;
-    }
-
-    public int getFieldSize() {
-        return fieldSize;
-    }
-
-    public FieldValue[][] getValues() {
-        return values;
     }
 
     @Override

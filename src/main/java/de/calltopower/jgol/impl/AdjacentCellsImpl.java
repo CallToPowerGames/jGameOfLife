@@ -70,7 +70,7 @@ public class AdjacentCellsImpl implements Initializable, AdjacentCells {
         StringBuilder sb = new StringBuilder("AdjacentCells{\n");
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                sb.append(adjacentCells[i][j].getValue().getValue()).append(j >= 2 ? "\n" : " ");
+                sb.append(adjacentCells[i][j].getValue().getVal()).append(j >= 2 ? "\n" : " ");
             }
         }
         sb.append("}");

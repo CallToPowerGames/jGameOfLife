@@ -11,6 +11,8 @@ import java.awt.Graphics;
 
 import de.calltopower.jgol.api.Field;
 import de.calltopower.jgol.enums.FieldValue;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Field implementation
@@ -22,18 +24,28 @@ public class FieldImpl implements Field {
     private Color colorHighlightedActive = Color.blue;
     private Color colorHighlightedInactive = Color.yellow;
 
+    @Getter
     private int x;
+
+    @Getter
     private int y;
+
+    @Getter
     private int size;
+
+    @Getter
     private FieldValue value;
+
+    @Getter
+    @Setter
     private boolean highlighted;
 
     /**
      * Constructor
      * 
-     * @param x Row
-     * @param y Column
-     * @param size The size
+     * @param x     Row
+     * @param y     Column
+     * @param size  The size
      * @param value The value
      */
     public FieldImpl(int x, int y, int size, FieldValue value) {
@@ -42,31 +54,6 @@ public class FieldImpl implements Field {
         this.size = size;
         this.value = value;
         highlighted = false;
-    }
-
-    @Override
-    public FieldValue getValue() {
-        return value;
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
-    }
-
-    @Override
-    public int getSize() {
-        return size;
-    }
-
-    @Override
-    public boolean isHighlighted() {
-        return highlighted;
     }
 
     @Override
@@ -82,11 +69,6 @@ public class FieldImpl implements Field {
     @Override
     public void toggleValue() {
         setValue(value == FieldValue.ACTIVE ? FieldValue.INACTIVE : FieldValue.ACTIVE);
-    }
-
-    @Override
-    public void setHighlighted(boolean highlighted) {
-        this.highlighted = highlighted;
     }
 
     @Override
